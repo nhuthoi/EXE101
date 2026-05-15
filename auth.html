@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng nhập - DL Marketing Cửu Long</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, rgba(61, 178, 255, 0.18), transparent 30%),
+        #06111e;
+      padding: 2rem;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(17, 32, 58, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 32px;
+      padding: 2.5rem;
+      backdrop-filter: blur(18px);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .auth-header h1 {
+      margin: 0 0 0.5rem;
+      font-size: 1.8rem;
+    }
+
+    .auth-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .auth-form {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      color: var(--text);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 1rem 1.1rem;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      outline: none;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--blue);
+    }
+
+    .form-group input::placeholder {
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #06111e;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      font-size: 1rem;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .toggle-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: var(--muted);
+    }
+
+    .toggle-link a {
+      color: var(--blue);
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .toggle-link a:hover {
+      color: var(--cyan);
+    }
+
+    .error-message {
+      background: rgba(255, 74, 74, 0.1);
+      border: 1px solid rgba(255, 74, 74, 0.3);
+      color: #ff6b6b;
+      padding: 1rem;
+      border-radius: 12px;
+      display: none;
+      margin-bottom: 1rem;
+    }
+
+    .success-message {
+      background: rgba(130, 255, 202, 0.1);
+      border: 1px solid rgba(130, 255, 202, 0.3);
+      color: #82ffca;
+      padding: 1rem;
+      border-radius: 12px;
+      display: none;
+      margin-bottom: 1rem;
+    }
+
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--blue);
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      color: var(--cyan);
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <!-- Login Form -->
+      <form id="loginForm" class="auth-form">
+        <div class="auth-header">
+          <h1>Đăng nhập</h1>
+          <p>Quản lý chiến dịch marketing của bạn</p>
+        </div>
+
+        <div class="error-message" id="loginError"></div>
+        <div class="success-message" id="loginSuccess"></div>
+
+        <div class="form-group">
+          <label for="login-username">Tên đăng nhập</label>
+          <input type="text" id="login-username" placeholder="Nhập tên đăng nhập" required />
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Mật khẩu</label>
+          <input type="password" id="login-password" placeholder="Nhập mật khẩu" required />
+        </div>
+
+        <button type="submit" class="submit-btn">Đăng nhập</button>
+
+        <div class="toggle-link">
+          Chưa có tài khoản? <a onclick="toggleForms()">Đăng ký ngay</a>
+        </div>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="auth-form">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+          <a onclick="toggleForms()" class="back-link" style="margin-bottom: 0;">← Quay lại</a>
+        </div>
+
+        <div class="auth-header" style="margin-bottom: 1.5rem;">
+          <h1>Đăng ký tài khoản</h1>
+          <p>Bắt đầu sử dụng DL Marketing ngay</p>
+        </div>
+
+        <div class="error-message" id="registerError"></div>
+        <div class="success-message" id="registerSuccess"></div>
+
+        <div class="form-group">
+          <label for="reg-username">Tên đăng nhập</label>
+          <input type="text" id="reg-username" placeholder="Tên đăng nhập duy nhất" required />
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" placeholder="Email của bạn" required />
+        </div>
+
+        <div class="form-group">
+          <label for="reg-full-name">Tên đầy đủ</label>
+          <input type="text" id="reg-full-name" placeholder="Tên của bạn" />
+        </div>
+
+        <div class="form-group">
+          <label for="reg-business">Loại hình kinh doanh</label>
+          <select id="reg-business">
+            <option value="">Chọn loại hình</option>
+            <option value="retail">Bán lẻ</option>
+            <option value="service">Dịch vụ</option>
+            <option value="tech">Công nghệ</option>
+            <option value="food">Thực phẩm & Đồ uống</option>
+            <option value="other">Khác</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password">Mật khẩu</label>
+          <input type="password" id="reg-password" placeholder="Mật khẩu (ít nhất 6 ký tự)" required />
+        </div>
+
+        <button type="submit" class="submit-btn">Đăng ký</button>
+
+        <div class="toggle-link">
+          Đã có tài khoản? <a onclick="toggleForms()">Đăng nhập</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Ẩn form đăng ký ban đầu
+      document.getElementById('registerForm').style.display = 'none';
+
+      // Login handler
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const username = document.getElementById('login-username').value;
+          const password = document.getElementById('login-password').value;
+
+          try {
+            const response = await fetch('/api/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              localStorage.setItem('token', data.token);
+              localStorage.setItem('user', JSON.stringify(data.user));
+              
+              showSuccess('loginSuccess', 'Đăng nhập thành công! Chuyển hướng...');
+              setTimeout(() => {
+                window.location.href = '/dashboard.html';
+              }, 1500);
+            } else {
+              showError('loginError', data.error || 'Đăng nhập thất bại');
+            }
+          } catch (error) {
+            showError('loginError', 'Lỗi kết nối. Vui lòng thử lại.');
+            console.error('Login error:', error);
+          }
+        });
+      }
+
+      // Register handler
+      const registerForm = document.getElementById('registerForm');
+      if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const username = document.getElementById('reg-username').value;
+          const email = document.getElementById('reg-email').value;
+          const full_name = document.getElementById('reg-full-name').value;
+          const business_type = document.getElementById('reg-business').value;
+          const password = document.getElementById('reg-password').value;
+
+          if (password.length < 6) {
+            showError('registerError', 'Mật khẩu phải có ít nhất 6 ký tự');
+            return;
+          }
+
+          try {
+            const response = await fetch('/api/register', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ username, email, password, full_name, business_type })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              showSuccess('registerSuccess', data.message);
+              document.getElementById('registerForm').reset();
+              setTimeout(() => toggleForms(), 1500);
+            } else {
+              showError('registerError', data.error || 'Đăng ký thất bại');
+            }
+          } catch (error) {
+            showError('registerError', 'Lỗi kết nối. Vui lòng thử lại.');
+            console.error('Register error:', error);
+          }
+        });
+      }
+    });
+
+    function toggleForms() {
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      
+      // Toggle display
+      const loginIsVisible = loginForm.style.display !== 'none';
+      
+      loginForm.style.display = loginIsVisible ? 'none' : 'grid';
+      registerForm.style.display = loginIsVisible ? 'grid' : 'none';
+      
+      // Clear messages
+      document.getElementById('loginError').style.display = 'none';
+      document.getElementById('loginSuccess').style.display = 'none';
+      document.getElementById('registerError').style.display = 'none';
+      document.getElementById('registerSuccess').style.display = 'none';
+    }
+
+    function showError(elementId, message) {
+      const el = document.getElementById(elementId);
+      if (el) {
+        el.textContent = message;
+        el.style.display = 'block';
+      }
+    }
+
+    function showSuccess(elementId, message) {
+      const el = document.getElementById(elementId);
+      if (el) {
+        el.textContent = message;
+        el.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

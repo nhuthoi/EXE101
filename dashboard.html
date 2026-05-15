@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>User Dashboard - Marketing FPTU</title>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+
+      <div class="brand">
+        <h1>Marketing FPTU</h1>
+        <p>User Dashboard</p>
+      </div>
+
+      <nav>
+        <a href="index.html">← Trang chủ</a>
+
+        <a id="userDisplay"
+           style="color: var(--cyan); font-weight: 600;">
+        </a>
+
+        <button class="logout-btn" onclick="logout()">
+          Đăng xuất
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <main class="dashboard-container">
+
+    <div class="dashboard-header">
+
+      <div>
+        <h1>Chiến lược Marketing</h1>
+
+        <p style="color: var(--muted); margin: 0;">
+          Quản lý chiến lược marketing cá nhân
+        </p>
+      </div>
+
+    </div>
+
+    <!-- STATS -->
+
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <div class="stat-value" id="totalCampaigns">0</div>
+        <div class="stat-label">Tổng chiến dịch</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value" id="activeCampaigns">0</div>
+        <div class="stat-label">✓ Đang hoạt động</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value" id="lastUpdate">--:--</div>
+        <div class="stat-label">Cập nhật lần cuối</div>
+      </div>
+
+    </div>
+
+    <!-- CAMPAIGNS -->
+
+    <div class="tab-content">
+
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:1.5rem;
+        gap:1rem;
+        flex-wrap:wrap;
+      ">
+
+        <div class="search-box" style="margin:0;">
+
+          <input
+            type="text"
+            id="campaignSearch"
+            placeholder="🔍 Tìm kiếm chiến dịch..."
+            onkeyup="filterCampaigns()"
+          />
+
+        </div>
+
+        <button class="button primary"
+                onclick="openCampaignModal()">
+
+          + Chiến dịch mới
+
+        </button>
+
+      </div>
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>Tên Chiến dịch</th>
+              <th>Nền tảng</th>
+              <th>Mục tiêu</th>
+              <th>Trạng thái</th>
+              <th>Hành động</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="campaigns-tbody">
+
+            <tr>
+              <td colspan="5"
+                  style="text-align:center; color:var(--muted);">
+                Đang tải...
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL -->
+
+  <div id="campaignModal" class="modal">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h2 style="margin:0;">
+          Tạo Chiến dịch Mới
+        </h2>
+
+        <button class="modal-close"
+                onclick="closeCampaignModal()">
+
+          ✕
+
+        </button>
+
+      </div>
+
+      <div id="campaignError"
+           class="alert alert-error">
+      </div>
+
+      <div id="campaignSuccess"
+           class="alert alert-success">
+      </div>
+
+      <div class="form-group">
+
+        <label>Tên Chiến dịch</label>
+
+        <input type="text"
+               id="campaign-name"
+               placeholder="VD: Summer Sale 2026" />
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Nền tảng</label>
+
+        <select id="campaign-platform">
+
+          <option value="">Chọn nền tảng</option>
+
+          <option value="Facebook">Facebook</option>
+
+          <option value="Instagram">Instagram</option>
+
+          <option value="TikTok">TikTok</option>
+
+          <option value="Google Ads">Google Ads</option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Mục tiêu</label>
+
+        <textarea id="campaign-goal"
+                  placeholder="Mô tả mục tiêu chiến dịch...">
+        </textarea>
+
+      </div>
+
+      <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:1rem;
+      ">
+
+        <div class="form-group">
+
+          <label>Ngày bắt đầu</label>
+
+          <input type="date" id="campaign-start" />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Ngày kết thúc</label>
+
+          <input type="date" id="campaign-end" />
+
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+
+        <button class="btn-submit"
+                onclick="saveCampaign()">
+
+          Tạo Chiến dịch
+
+        </button>
+
+        <button class="btn-cancel"
+                onclick="closeCampaignModal()">
+
+          Hủy
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    let campaigns = [];
+    let currentUser = null;
+
+    const API_BASE = window.location.origin + '/api';
+
+    // INIT
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+      checkAuth();
+
+      loadCampaigns();
+
+      setInterval(updateStats, 30000);
+
+    });
+
+    // AUTH
+
+    function checkAuth() {
+
+      const token = localStorage.getItem('token');
+      const user = localStorage.getItem('user');
+
+      if (!token || !user) {
+
+        window.location.href = '/auth.html';
+
+        return;
+
+      }
+
+      currentUser = JSON.parse(user);
+
+      // REDIRECT ADMIN
+
+      if (currentUser.is_admin) {
+
+        window.location.href = '/admin.html';
+
+        return;
+
+      }
+
+      document.getElementById('userDisplay')
+        .textContent = `👤 ${currentUser.username}`;
+
+    }
+
+    // LOAD CAMPAIGNS
+
+    async function loadCampaigns() {
+
+      const token = localStorage.getItem('token');
+
+      try {
+
+        const response = await fetch(`${API_BASE}/campaigns`, {
+
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+
+        });
+
+        if (response.ok) {
+
+          campaigns = await response.json() || [];
+
+          renderCampaigns();
+
+          updateStats();
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
+    // RENDER
+
+    function renderCampaigns(data = campaigns) {
+
+      const tbody = document.getElementById('campaigns-tbody');
+
+      if (data.length === 0) {
+
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5"
+                style="text-align:center; color:var(--muted);">
+              Chưa có chiến dịch nào
+            </td>
+          </tr>
+        `;
+
+        return;
+
+      }
+
+      tbody.innerHTML = data.map(campaign => `
+
+        <tr>
+
+          <td>
+            <strong>${campaign.name}</strong>
+          </td>
+
+          <td>${campaign.platform}</td>
+
+          <td>
+            <small>${campaign.goal || 'N/A'}</small>
+          </td>
+
+          <td>
+
+            <span class="badge ${
+              campaign.status === 'active'
+                ? 'badge-success'
+                : 'badge-pending'
+            }">
+
+              ${
+                campaign.status === 'active'
+                  ? '✓ Active'
+                  : '⏳ Inactive'
+              }
+
+            </span>
+
+          </td>
+
+          <td>
+
+            <div class="action-btns">
+
+              <button class="btn-sm"
+                      onclick="editCampaign(${campaign.id})">
+
+                Sửa
+
+              </button>
+
+              <button class="btn-sm"
+                      onclick="deleteCampaign(${campaign.id})"
+                      style="
+                        color:#ff6b6b;
+                        border-color:#ff6b6b;
+                      ">
+
+                Xóa
+
+              </button>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+    }
+
+    // STATS
+
+    function updateStats() {
+
+      const now = new Date();
+
+      document.getElementById('totalCampaigns')
+        .textContent = campaigns.length;
+
+      document.getElementById('activeCampaigns')
+        .textContent =
+          campaigns.filter(c => c.status === 'active').length;
+
+      document.getElementById('lastUpdate')
+        .textContent =
+          now.toLocaleTimeString(
+            'vi-VN',
+            {
+              hour:'2-digit',
+              minute:'2-digit'
+            }
+          );
+
+    }
+
+    // FILTER
+
+    function filterCampaigns() {
+
+      const search = document.getElementById('campaignSearch')
+        .value
+        .toLowerCase();
+
+      const filtered = campaigns.filter(c =>
+        c.name.toLowerCase().includes(search)
+      );
+
+      renderCampaigns(filtered);
+
+    }
+
+    // MODAL
+
+    function openCampaignModal() {
+
+      document.getElementById('campaignModal')
+        .classList.add('show');
+
+    }
+
+    function closeCampaignModal() {
+
+      document.getElementById('campaignModal')
+        .classList.remove('show');
+
+    }
+
+    // SAVE
+
+    async function saveCampaign() {
+
+      const token = localStorage.getItem('token');
+
+      const campaign = {
+
+        name:
+          document.getElementById('campaign-name').value,
+
+        platform:
+          document.getElementById('campaign-platform').value,
+
+        goal:
+          document.getElementById('campaign-goal').value,
+
+        start_date:
+          document.getElementById('campaign-start').value,
+
+        end_date:
+          document.getElementById('campaign-end').value
+
+      };
+
+      if (!campaign.name || !campaign.platform) {
+
+        alert('Vui lòng nhập đầy đủ');
+
+        return;
+
+      }
+
+      try {
+
+        const response = await fetch(`${API_BASE}/campaigns`, {
+
+          method:'POST',
+
+          headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${token}`
+          },
+
+          body:JSON.stringify(campaign)
+
+        });
+
+        if (response.ok) {
+
+          closeCampaignModal();
+
+          loadCampaigns();
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
+    // DELETE
+
+    async function deleteCampaign(id) {
+
+      if (!confirm('Bạn chắc chắn muốn xóa?')) {
+        return;
+      }
+
+      const token = localStorage.getItem('token');
+
+      try {
+
+        const response = await fetch(
+          `${API_BASE}/campaigns/${id}`,
+          {
+            method:'DELETE',
+
+            headers:{
+              'Authorization':`Bearer ${token}`
+            }
+          }
+        );
+
+        if (response.ok) {
+
+          loadCampaigns();
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
+    // EDIT
+
+    function editCampaign(id) {
+
+      alert('Bạn có thể thêm modal edit sau.');
+
+    }
+
+    // LOGOUT
+
+    function logout() {
+
+      localStorage.removeItem('token');
+
+      localStorage.removeItem('user');
+
+      window.location.href = '/auth.html';
+
+    }
+
+    // CLOSE MODAL
+
+    document.addEventListener('click', (e) => {
+
+      if (e.target.id === 'campaignModal') {
+
+        closeCampaignModal();
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>

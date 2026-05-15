@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaign Manager - DL Marketing Cửu Long</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .campaign-container {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    .campaign-sidebar {
+      background: rgba(9, 18, 33, 0.96);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 2rem 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .campaign-main {
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      padding: 0 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-brand h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: var(--cyan);
+    }
+
+    .sidebar-nav {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active {
+      color: var(--cyan);
+      background: rgba(105, 226, 255, 0.1);
+    }
+
+    .campaign-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .campaign-header h1 {
+      margin: 0;
+    }
+
+    .btn-new {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #06111e;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-new:hover {
+      transform: translateY(-2px);
+    }
+
+    .campaign-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .campaign-card {
+      background: rgba(17, 32, 58, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .campaign-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-4px);
+    }
+
+    .campaign-card h3 {
+      margin: 0 0 0.5rem;
+      color: var(--cyan);
+    }
+
+    .campaign-card .platform {
+      display: inline-block;
+      background: rgba(61, 178, 255, 0.2);
+      color: var(--blue);
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .campaign-card .status {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .status.active {
+      background: rgba(130, 255, 202, 0.2);
+      color: #82ffca;
+    }
+
+    .status.paused {
+      background: rgba(255, 193, 7, 0.2);
+      color: #ffc107;
+    }
+
+    .campaign-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin: 1rem 0;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .campaign-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .btn-small {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-small:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: rgba(17, 32, 58, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 2rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      color: var(--cyan);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--text);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 0.8rem;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--blue);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn-primary {
+      flex: 1;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #06111e;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      padding: 0.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="campaign-container">
+    <!-- Sidebar -->
+    <div class="campaign-sidebar">
+      <div class="sidebar-brand">
+        <h2>📱 Campaigns</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <a onclick="switchTab('campaigns')" class="nav-item active"> Chiến dịch</a>
+        <a onclick="switchTab('content')" class="nav-item"> AI Content</a>
+        <a onclick="switchTab('analytics')" class="nav-item" Phân tích</a>
+        <a onclick="switchTab('branding')" class="nav-item"> Branding</a>
+        <a href="clients.html" class="nav-item" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08);">👥 Khách hàng</a>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="campaign-main">
+      <!-- Campaigns Tab -->
+      <div id="campaigns-tab" class="tab-content">
+        <div class="campaign-header">
+          <h1>Quản lý Chiến dịch</h1>
+          <button class="btn-new" onclick="openCampaignModal()">+ Chiến dịch mới</button>
+        </div>
+
+        <div id="campaigns-list" class="campaign-grid"></div>
+      </div>
+
+      <!-- AI Content Tab -->
+      <div id="content-tab" class="tab-content" style="display: none;">
+        <h1>AI Content Generator</h1>
+        <div style="background: rgba(17, 32, 58, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 2rem;">
+          <div class="form-group">
+            <label>Chủ đề nội dung</label>
+            <input type="text" id="content-topic" placeholder="VD: Khuyến mãi mùa hè cho shop thời trang" />
+          </div>
+
+          <div class="form-group">
+            <label>Mô tả sản phẩm/dịch vụ</label>
+            <textarea id="content-description" placeholder="Mô tả chi tiết" style="min-height: 120px;"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Tông chất nội dung</label>
+            <select id="content-tone">
+              <option value="professional">Chuyên nghiệp</option>
+              <option value="casual">Thân thiện</option>
+              <option value="promotional">Quảng cáo</option>
+              <option value="educational">Giáo dục</option>
+            </select>
+          </div>
+
+          <button class="btn-new" onclick="generateContent()" style="width: 100%; margin-top: 1rem;">🤖 Tạo nội dung với AI</button>
+
+          <div id="generated-content" style="margin-top: 2rem; display: none;">
+            <h3 style="color: var(--cyan); margin-bottom: 1rem;">Nội dung đã tạo:</h3>
+            <div id="content-output" style="background: rgba(255, 255, 255, 0.03); padding: 1rem; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.08); min-height: 150px;"></div>
+            <button class="btn-new" onclick="copyContent()" style="width: 100%; margin-top: 1rem;">📋 Copy nội dung</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Tab -->
+      <div id="analytics-tab" class="tab-content" style="display: none;">
+        <h1>Phân tích Chiến dịch</h1>
+        <div style="background: rgba(17, 32, 58, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 2rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <div style="background: linear-gradient(180deg, rgba(61, 178, 255, 0.1), rgba(105, 226, 255, 0.05)); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 1.5rem; text-align: center;">
+              <div style="font-size: 2rem; font-weight: 700; color: var(--cyan);">1,248</div>
+              <div style="color: var(--muted); margin-top: 0.5rem;">Lượt xem</div>
+            </div>
+            <div style="background: linear-gradient(180deg, rgba(61, 178, 255, 0.1), rgba(105, 226, 255, 0.05)); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 1.5rem; text-align: center;">
+              <div style="font-size: 2rem; font-weight: 700; color: var(--cyan);">342</div>
+              <div style="color: var(--muted); margin-top: 0.5rem;">Tương tác</div>
+            </div>
+            <div style="background: linear-gradient(180deg, rgba(61, 178, 255, 0.1), rgba(105, 226, 255, 0.05)); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 1.5rem; text-align: center;">
+              <div style="font-size: 2rem; font-weight: 700; color: var(--cyan);">27.4%</div>
+              <div style="color: var(--muted); margin-top: 0.5rem;">Tỷ lệ chuyển đổi</div>
+            </div>
+          </div>
+          <p style="color: var(--muted); text-align: center;">Biểu đồ chi tiết sẽ được cập nhật sớm...</p>
+        </div>
+      </div>
+
+      <!-- Branding Tab -->
+      <div id="branding-tab" class="tab-content" style="display: none;">
+        <h1>Công cụ Branding</h1>
+        <div style="background: rgba(17, 32, 58, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 2rem;">
+          <div class="form-group">
+            <label>Tên thương hiệu</label>
+            <input type="text" id="brand-name" placeholder="VD: DL Marketing Cửu Long" />
+          </div>
+
+          <div class="form-group">
+            <label>Màu chính (Hex)</label>
+            <input type="color" id="brand-color" value="#3db2ff" />
+          </div>
+
+          <div class="form-group">
+            <label>Khẩu hiệu (Tagline)</label>
+            <input type="text" id="brand-tagline" placeholder="VD: AI & Bảo mật cho doanh nghiệp nhỏ" />
+          </div>
+
+          <div class="form-group">
+            <label>Mô tả thương hiệu</label>
+            <textarea id="brand-description" placeholder="Mô tả tính cách và giá trị của thương hiệu" style="min-height: 120px;"></textarea>
+          </div>
+
+          <button class="btn-new" onclick="generateBrandGuide()" style="width: 100%; margin-top: 1rem;">🎨 Tạo Brand Guide</button>
+
+          <div id="brand-preview" style="margin-top: 2rem; display: none;">
+            <h3 style="color: var(--cyan); margin-bottom: 1rem;">Bộ nhận diện thương hiệu:</h3>
+            <div id="brand-guide-output" style="background: rgba(255, 255, 255, 0.03); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.08);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Campaign Modal -->
+  <div id="campaignModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 style="margin: 0;">Tạo Chiến dịch Mới</h2>
+        <button class="modal-close" onclick="closeCampaignModal()">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label>Tên chiến dịch</label>
+        <input type="text" id="campaign-name" placeholder="VD: Back to School Sale 2026" />
+      </div>
+
+      <div class="form-group">
+        <label>Nền tảng</label>
+        <select id="campaign-platform">
+          <option value="">Chọn nền tảng</option>
+          <option value="facebook">Facebook</option>
+          <option value="instagram">Instagram</option>
+          <option value="tiktok">TikTok</option>
+          <option value="all">Tất cả nền tảng</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Mục tiêu</label>
+        <input type="text" id="campaign-goal" placeholder="VD: Tăng bán hàng 50% trong 30 ngày" />
+      </div>
+
+      <div class="form-group">
+        <label>Ngày bắt đầu</label>
+        <input type="date" id="campaign-start" />
+      </div>
+
+      <div class="form-group">
+        <label>Ngày kết thúc</label>
+        <input type="date" id="campaign-end" />
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-primary" onclick="saveCampaign()">Tạo chiến dịch</button>
+        <button class="btn-secondary" onclick="closeCampaignModal()">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let campaigns = JSON.parse(localStorage.getItem('campaigns') || '[]');
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+      document.getElementById(tabName + '-tab').style.display = 'block';
+
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function renderCampaigns() {
+      const list = document.getElementById('campaigns-list');
+      
+      if (campaigns.length === 0) {
+        list.innerHTML = `
+          <div style="grid-column: 1/-1;">
+            <div class="empty-state">
+              <div class="empty-state-icon">📭</div>
+              <p>Chưa có chiến dịch nào. Hãy tạo chiến dịch đầu tiên!</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = campaigns.map((c, i) => `
+        <div class="campaign-card">
+          <h3>${c.name}</h3>
+          <span class="platform">${c.platform.toUpperCase()}</span>
+          <span class="status active">Đang chạy</span>
+          
+          <div class="campaign-stats">
+            <div class="stat-item">
+              <div class="stat-value">1,248</div>
+              <div class="stat-label">Lượt xem</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">342</div>
+              <div class="stat-label">Tương tác</div>
+            </div>
+          </div>
+
+          <p style="margin: 1rem 0 0; color: var(--muted); font-size: 0.9rem;">📅 ${c.start} đến ${c.end}</p>
+          <p style="margin: 0.5rem 0 0; color: var(--muted); font-size: 0.9rem;">🎯 ${c.goal}</p>
+
+          <div class="campaign-actions">
+            <button class="btn-small" onclick="editCampaign(${i})">Sửa</button>
+            <button class="btn-small" onclick="deleteCampaign(${i})">Xóa</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openCampaignModal() {
+      document.getElementById('campaignModal').classList.add('show');
+    }
+
+    function closeCampaignModal() {
+      document.getElementById('campaignModal').classList.remove('show');
+      document.getElementById('campaign-name').value = '';
+      document.getElementById('campaign-platform').value = '';
+      document.getElementById('campaign-goal').value = '';
+    }
+
+    function saveCampaign() {
+      const campaign = {
+        name: document.getElementById('campaign-name').value,
+        platform: document.getElementById('campaign-platform').value,
+        goal: document.getElementById('campaign-goal').value,
+        start: document.getElementById('campaign-start').value,
+        end: document.getElementById('campaign-end').value
+      };
+
+      if (!campaign.name || !campaign.platform) {
+        alert('Vui lòng điền đầy đủ thông tin');
+        return;
+      }
+
+      campaigns.push(campaign);
+      localStorage.setItem('campaigns', JSON.stringify(campaigns));
+      renderCampaigns();
+      closeCampaignModal();
+    }
+
+    function deleteCampaign(index) {
+      if (confirm('Bạn chắc chắn muốn xóa?')) {
+        campaigns.splice(index, 1);
+        localStorage.setItem('campaigns', JSON.stringify(campaigns));
+        renderCampaigns();
+      }
+    }
+
+    function generateContent() {
+      const topic = document.getElementById('content-topic').value;
+      const description = document.getElementById('content-description').value;
+      const tone = document.getElementById('content-tone').value;
+
+      if (!topic || !description) {
+        alert('Vui lòng điền đầy đủ thông tin');
+        return;
+      }
+
+      const templates = {
+        professional: `[${topic}]\n\nKính gửi quý khách,\n\n${description}\n\nChúng tôi cam kết mang lại chất lượng tốt nhất cho bạn.`,
+        casual: `Cập nhật: ${topic}! \n\n${description}\n\nHãy khám phá ngay nào! 😊`,
+        promotional: ` SIÊU KHUYẾN MÃI: ${topic} \n\n${description}\n\n⏰ Có giới hạn! Mua ngay!`,
+        educational: ` ${topic}\n\n${description}\n\nHọc thêm tại: [link]`
+      };
+
+      const content = templates[tone] || templates.professional;
+      document.getElementById('content-output').textContent = content;
+      document.getElementById('generated-content').style.display = 'block';
+    }
+
+    function copyContent() {
+      const text = document.getElementById('content-output').textContent;
+      navigator.clipboard.writeText(text);
+      alert('Đã copy nội dung!');
+    }
+
+    function generateBrandGuide() {
+      const name = document.getElementById('brand-name').value;
+      const color = document.getElementById('brand-color').value;
+      const tagline = document.getElementById('brand-tagline').value;
+      const description = document.getElementById('brand-description').value;
+
+      if (!name || !tagline) {
+        alert('Vui lòng điền đầy đủ thông tin');
+        return;
+      }
+
+      const guide = `
+        <strong> Brand Guide - ${name}</strong><br><br>
+        <strong>Khẩu hiệu:</strong> "${tagline}"<br>
+        <strong>Màu chính:</strong> <span style="display: inline-block; width: 30px; height: 30px; background: ${color}; border: 1px solid #fff; border-radius: 4px; vertical-align: middle;"></span> ${color}<br>
+        <strong>Mô tả:</strong> ${description}<br><br>
+        <strong>Các ứng dụng:</strong><br>
+        ✓ Logo thương hiệu<br>
+        ✓ Thiết kế website<br>
+        ✓ Bài đăng mạng xã hội<br>
+        ✓ Email marketing<br>
+        ✓ In ấn & Quảng cáo
+      `;
+
+      document.getElementById('brand-guide-output').innerHTML = guide;
+      document.getElementById('brand-preview').style.display = 'block';
+    }
+
+    // Initialize
+    renderCampaigns();
+  </script>
+</body>
+</html>

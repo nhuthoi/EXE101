@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio - Marketing FPTU</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .portfolio-container {
+      padding: 4rem 0;
+    }
+
+    .portfolio-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .portfolio-header h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .portfolio-header p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .portfolio-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 0.8rem 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #06111e;
+      border-color: var(--cyan);
+    }
+
+    .tab-btn:hover:not(.active) {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .portfolio-card {
+      background: rgba(17, 32, 58, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .portfolio-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(61, 178, 255, 0.15);
+    }
+
+    .portfolio-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, rgba(61, 178, 255, 0.2), rgba(105, 226, 255, 0.1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .portfolio-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .portfolio-card:hover .portfolio-image img {
+      transform: scale(1.05);
+    }
+
+    .portfolio-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .portfolio-content {
+      padding: 1.5rem;
+    }
+
+    .portfolio-content h3 {
+      margin: 0 0 0.5rem;
+      color: var(--cyan);
+    }
+
+    .portfolio-content p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .portfolio-tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background: rgba(61, 178, 255, 0.15);
+      color: var(--blue);
+      padding: 0.3rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+    }
+
+    .case-study {
+      background: rgba(17, 32, 58, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .case-study h3 {
+      color: var(--cyan);
+      margin-bottom: 1rem;
+    }
+
+    .case-study-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .metric {
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+
+    .metric-label {
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    .screenshot {
+      width: 100%;
+      height: 300px;
+      background: linear-gradient(135deg, rgba(61, 178, 255, 0.2), rgba(105, 226, 255, 0.1));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      margin: 1.5rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <h1>Marketing FPTU</h1>
+        <p>Portfolio & Case Studies</p>
+      </div>
+      <nav>
+        <a href="index.html">← Về trang chủ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container portfolio-container">
+    <section class="portfolio-header">
+      <h2>Portfolio & Case Studies</h2>
+      <p>Các chiến dịch digital marketing thành công trên nền tảng xã hội cho doanh nghiệp</p>
+    </section>
+
+    <!-- Filter Tabs -->
+    <div class="portfolio-tabs">
+      <button class="tab-btn active" onclick="filterPortfolio('all')">Tất cả</button>
+      <button class="tab-btn" onclick="filterPortfolio('social')">Social Media</button>
+      <button class="tab-btn" onclick="filterPortfolio('branding')"> Branding</button>
+      <button class="tab-btn" onclick="filterPortfolio('content')"> Content</button>
+    </div>
+
+    <!-- Campaign Portfolio -->
+    <div id="social-section">
+      <h3 style="color: var(--cyan); margin-bottom: 1.5rem;">Chiến dịch Social Media</h3>
+      <div class="portfolio-grid">
+        <div class="portfolio-card">
+          <div class="portfolio-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g1' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233db2ff;stop-opacity:0.3'/%3E%3Cstop offset='100%25' style='stop-color:%2369e2ff;stop-opacity:0.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='200' fill='url(%23g1)'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%2369e2ff' text-anchor='middle' dominant-baseline='middle' font-weight='bold'%3EBack to School%3C/text%3E%3Ctext x='50%25' y='70%25' font-size='14' fill='%23a0c9ff' text-anchor='middle' dominant-baseline='middle'%3ECampaign%3C/text%3E%3C/svg%3E" alt="Back to School Campaign">
+          </div>
+          <div class="portfolio-content">
+            <h3>Back to School Campaign</h3>
+            <p>Chiến dịch quảng cáo cho cửa hàng quần áo, tăng doanh thu 45% trong 3 tuần</p>
+            <div class="portfolio-tags">
+              <span class="tag">Facebook</span>
+              <span class="tag">Instagram</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-card">
+          <div class="portfolio-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g2' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233db2ff;stop-opacity:0.3'/%3E%3Cstop offset='100%25' style='stop-color:%2369e2ff;stop-opacity:0.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='200' fill='url(%23g2)'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%2369e2ff' text-anchor='middle' dominant-baseline='middle' font-weight='bold'%3EQu%C3%A1n C%C3%A0 Ph%C3%AA%3C/text%3E%3Ctext x='50%25' y='70%25' font-size='14' fill='%23a0c9ff' text-anchor='middle' dominant-baseline='middle'%3EViral Campaign%3C/text%3E%3C/svg%3E" alt="Quán Cà Phê Viral">
+          </div>
+          <div class="portfolio-content">
+            <h3>Quán Cà Phê Viral</h3>
+            <p>Tạo content quán cà phê mới, đạt 50K+ impressions/tuần</p>
+            <div class="portfolio-tags">
+              <span class="tag">TikTok</span>
+              <span class="tag">Instagram Reels</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-card">
+          <div class="portfolio-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g3' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233db2ff;stop-opacity:0.3'/%3E%3Cstop offset='100%25' style='stop-color:%2369e2ff;stop-opacity:0.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='200' fill='url(%23g3)'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%2369e2ff' text-anchor='middle' dominant-baseline='middle' font-weight='bold'%3EBeauty Shop%3C/text%3E%3Ctext x='50%25' y='70%25' font-size='14' fill='%23a0c9ff' text-anchor='middle' dominant-baseline='middle'%3EMakeover%3C/text%3E%3C/svg%3E" alt="Beauty Shop Makeover">
+          </div>
+          <div class="portfolio-content">
+            <h3>Beauty Shop Makeover</h3>
+            <p>Chiến dịch rebranding cho cửa hàng mỹ phẩm</p>
+            <div class="portfolio-tags">
+              <span class="tag">Facebook</span>
+              <span class="tag">Content Creation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Branding Portfolio -->
+    <div id="branding-section" style="display: none;">
+      <h3 style="color: var(--cyan); margin-bottom: 1.5rem;">🎨 Bộ Nhận Diện Thương Hiệu</h3>
+      <div class="portfolio-grid">
+        <div class="portfolio-card">
+          <div class="portfolio-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g4' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2369e2ff;stop-opacity:0.3'/%3E%3Cstop offset='100%25' style='stop-color:%2382ffca;stop-opacity:0.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='200' fill='url(%23g4)'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%2382ffca' text-anchor='middle' dominant-baseline='middle' font-weight='bold'%3EABC Shop%3C/text%3E%3Ctext x='50%25' y='70%25' font-size='14' fill='%23a0d9b8' text-anchor='middle' dominant-baseline='middle'%3EBrand Identity%3C/text%3E%3C/svg%3E" alt="ABC Shop Brand Identity">
+          </div>
+          <div class="portfolio-content">
+            <h3>ABC Shop Brand Identity</h3>
+            <p>Logo, màu sắc, typography, và branding guidelines hoàn chỉnh</p>
+            <div class="portfolio-tags">
+              <span class="tag">Logo</span>
+              <span class="tag">Color Palette</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-card">
+          <div class="portfolio-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g5' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2369e2ff;stop-opacity:0.3'/%3E%3Cstop offset='100%25' style='stop-color:%2382ffca;stop-opacity:0.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='200' fill='url(%23g5)'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%2382ffca' text-anchor='middle' dominant-baseline='middle' font-weight='bold'%3ETech Startup%3C/text%3E%3Ctext x='50%25' y='70%25' font-size='14' fill='%23a0d9b8' text-anchor='middle' dominant-baseline='middle'%3EVisual System%3C/text%3E%3C/svg%3E" alt="Tech Startup Visual System">
+          </div>
+          <div class="portfolio-content">
+            <h3>Tech Startup Visual System</h3>
+            <p>Hệ thống nhận diện hiện đại cho công ty công nghệ</p>
+            <div class="portfolio-tags">
+              <span class="tag">Brand Guide</span>
+              <span class="tag">Web Design</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-card">
+          <div class="portfolio-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g6' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2369e2ff;stop-opacity:0.3'/%3E%3Cstop offset='100%25' style='stop-color:%2382ffca;stop-opacity:0.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='200' fill='url(%23g6)'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%2382ffca' text-anchor='middle' dominant-baseline='middle' font-weight='bold'%3EXYZ Cafe%3C/text%3E%3Ctext x='50%25' y='70%25' font-size='14' fill='%23a0d9b8' text-anchor='middle' dominant-baseline='middle'%3ERebrand%3C/text%3E%3C/svg%3E" alt="XYZ Cafe Rebrand">
+          </div>
+          <div class="portfolio-content">
+            <h3>XYZ Cafe Rebrand</h3>
+            <p>Thiết kế lại toàn bộ bộ nhận diện thương hiệu cho quán cà phê</p>
+            <div class="portfolio-tags">
+              <span class="tag">Logo Redesign</span>
+              <span class="tag">Menu Design</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Portfolio -->
+    <div id="content-section" style="display: none;">
+      <h3 style="color: var(--cyan); margin-bottom: 1.5rem;">✍️ Content Created</h3>
+      <div class="portfolio-grid">
+        <div class="portfolio-card">
+          <div class="portfolio-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g7' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2382ffca;stop-opacity:0.3'/%3E%3Cstop offset='100%25' style='stop-color:%233db2ff;stop-opacity:0.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='200' fill='url(%23g7)'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%2382ffca' text-anchor='middle' dominant-baseline='middle' font-weight='bold'%3EBlog Series%3C/text%3E%3Ctext x='50%25' y='70%25' font-size='14' fill='%23a0d9b8' text-anchor='middle' dominant-baseline='middle'%3ETips %26 Tricks%3C/text%3E%3C/svg%3E" alt="Blog Series">
+          </div>
+          <div class="portfolio-content">
+            <h3>Blog Series - Tips & Tricks</h3>
+            <p>Chuỗi bài viết SEO-optimized, giúp tăng organic traffic 200%</p>
+            <div class="portfolio-tags">
+              <span class="tag">SEO</span>
+              <span class="tag">Blog</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-card">
+          <div class="portfolio-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g8' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2382ffca;stop-opacity:0.3'/%3E%3Cstop offset='100%25' style='stop-color:%233db2ff;stop-opacity:0.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='200' fill='url(%23g8)'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%2382ffca' text-anchor='middle' dominant-baseline='middle' font-weight='bold'%3EVideo Marketing%3C/text%3E%3Ctext x='50%25' y='70%25' font-size='14' fill='%23a0d9b8' text-anchor='middle' dominant-baseline='middle'%3ESeries%3C/text%3E%3C/svg%3E" alt="Video Marketing Series">
+          </div>
+          <div class="portfolio-content">
+            <h3>Video Marketing Series</h3>
+            <p>12 video quảng cáo sản phẩm, tạo bằng AI-assisted editing</p>
+            <div class="portfolio-tags">
+              <span class="tag">Video</span>
+              <span class="tag">AI Generated</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-card">
+          <div class="portfolio-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g9' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2382ffca;stop-opacity:0.3'/%3E%3Cstop offset='100%25' style='stop-color:%233db2ff;stop-opacity:0.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='200' fill='url(%23g9)'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%2382ffca' text-anchor='middle' dominant-baseline='middle' font-weight='bold'%3EEmail Campaign%3C/text%3E%3Ctext x='50%25' y='70%25' font-size='14' fill='%23a0d9b8' text-anchor='middle' dominant-baseline='middle'%3ESeries%3C/text%3E%3C/svg%3E" alt="Email Campaign Series">
+          </div>
+          <div class="portfolio-content">
+            <h3>Email Campaign Series</h3>
+            <p>Email marketing campaign tăng conversion rate lên 35%</p>
+            <div class="portfolio-tags">
+              <span class="tag">Email</span>
+              <span class="tag">Conversion</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case Study Section -->
+    <section class="case-study">
+      <h2 style="margin-top: 0; color: var(--cyan);">Ví dụ đã thành công ảnh minh họa</h2>
+      
+      <p>xxxxxxxx</p>
+
+      <h3>Chiến lược thực hiện:</h3>
+      <ul style="color: var(--muted);">
+        <li>xxx</li>
+        <li>xxx</li>
+        <li>xxx</li>
+        <li>xxx</li>
+        <li>xxx</li>
+      </ul>
+
+      <h3>Kết quả đạt được:</h3>
+      <div class="case-study-grid">
+        <div class="metric">
+          <div class="metric-value">+xx%</div>
+          <div class="metric-label">Tăng Followers</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">xxK</div>
+          <div class="metric-label">Impressions/tuần</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">xx%</div>
+          <div class="metric-label">Engagement Rate</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">$xxx0</div>
+          <div class="metric-label">Doanh thu tăng</div>
+        </div>
+      </div>
+
+      <h3>Thời gian thực hiện:</h3>
+      <p><strong>Chu kỳ:</strong> x tuần | <strong>Chi phí:</strong> $xxx | <strong>ROI:</strong> xxx%</p>
+    </section>
+  </main>
+
+  <script>
+    function filterPortfolio(type) {
+      // Hide all sections
+      document.getElementById('social-section').style.display = 'none';
+      document.getElementById('branding-section').style.display = 'none';
+      document.getElementById('content-section').style.display = 'none';
+
+      // Remove active class from all tabs
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+      // Show selected section and mark tab as active
+      if (type === 'all') {
+        document.getElementById('social-section').style.display = 'block';
+        document.getElementById('branding-section').style.display = 'block';
+        document.getElementById('content-section').style.display = 'block';
+      } else {
+        document.getElementById(type + '-section').style.display = 'block';
+      }
+
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>

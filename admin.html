@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Admin Dashboard - Marketing FPTU</title>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <header class="site-header">
+
+    <div class="container header-inner">
+
+      <div class="brand">
+
+        <h1>Marketing FPTU</h1>
+
+        <p>Admin Dashboard</p>
+
+      </div>
+
+      <nav>
+
+        <a href="index.html">← Trang chủ</a>
+
+        <a id="userDisplay"
+           style="color: var(--cyan); font-weight: 600;">
+        </a>
+
+        <button class="logout-btn"
+                onclick="logout()">
+
+          Đăng xuất
+
+        </button>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+  <main class="dashboard-container">
+
+    <!-- HEADER -->
+
+    <div class="dashboard-header">
+
+      <div>
+
+        <h1>Admin Dashboard</h1>
+
+        <p style="color: var(--muted); margin:0;">
+
+          Quản trị toàn bộ hệ thống
+
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- STATS -->
+
+    <div class="stats-grid">
+
+      <div class="stat-card">
+
+        <div class="stat-value"
+             id="totalUsers">
+
+          0
+
+        </div>
+
+        <div class="stat-label">
+          Tổng Users
+        </div>
+
+      </div>
+
+      <div class="stat-card">
+
+        <div class="stat-value"
+             id="totalCampaigns">
+
+          0
+
+        </div>
+
+        <div class="stat-label">
+          Tổng Campaigns
+        </div>
+
+      </div>
+
+      <div class="stat-card">
+
+        <div class="stat-value"
+             id="totalClients">
+
+          0
+
+        </div>
+
+        <div class="stat-label">
+          Tổng Clients
+        </div>
+
+      </div>
+
+      <div class="stat-card">
+
+        <div class="stat-value"
+             id="lastUpdate">
+
+          --:--
+
+        </div>
+
+        <div class="stat-label">
+          Last Update
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TABS -->
+
+    <div class="tabs">
+
+      <button class="tab-btn active"
+              onclick="switchTab('users')">
+
+        Users
+
+      </button>
+
+      <button class="tab-btn"
+              onclick="switchTab('campaigns')">
+
+        Campaigns
+
+      </button>
+
+      <button class="tab-btn"
+              onclick="switchTab('clients')">
+
+        Clients
+
+      </button>
+
+      <button class="tab-btn"
+              onclick="switchTab('analytics')">
+
+        Analytics
+
+      </button>
+
+    </div>
+
+    <!-- USERS -->
+
+    <div id="users-tab"
+         class="tab-content">
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>ID</th>
+
+              <th>Username</th>
+
+              <th>Email</th>
+
+              <th>Business</th>
+
+              <th>Role</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="users-tbody">
+
+            <tr>
+
+              <td colspan="5"
+                  style="text-align:center; color:var(--muted);">
+
+                Đang tải...
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <!-- CAMPAIGNS -->
+
+    <div id="campaigns-tab"
+         class="tab-content"
+         style="display:none;">
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>User</th>
+
+              <th>Tên</th>
+
+              <th>Platform</th>
+
+              <th>Status</th>
+
+              <th>Mục tiêu</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="campaigns-tbody">
+
+            <tr>
+
+              <td colspan="5"
+                  style="text-align:center; color:var(--muted);">
+
+                Đang tải...
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <!-- CLIENTS -->
+
+    <div id="clients-tab"
+         class="tab-content"
+         style="display:none;">
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>User</th>
+
+              <th>Business</th>
+
+              <th>Contact</th>
+
+              <th>Email</th>
+
+              <th>Service</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="clients-tbody">
+
+            <tr>
+
+              <td colspan="5"
+                  style="text-align:center; color:var(--muted);">
+
+                Đang tải...
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <!-- ANALYTICS -->
+
+    <div id="analytics-tab"
+         class="tab-content"
+         style="display:none;">
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>Page</th>
+
+              <th>Action</th>
+
+              <th>Time</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="analytics-tbody">
+
+            <tr>
+
+              <td colspan="3"
+                  style="text-align:center; color:var(--muted);">
+
+                Đang tải...
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+
+    let users = [];
+    let campaigns = [];
+    let clients = [];
+
+    const API_BASE =
+      window.location.origin + '/api';
+
+    // INIT
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+      checkAdmin();
+
+      loadAllData();
+
+    });
+
+    // CHECK ADMIN
+
+    function checkAdmin() {
+
+      const token = localStorage.getItem('token');
+
+      const user = localStorage.getItem('user');
+
+      if (!token || !user) {
+
+        window.location.href = '/auth.html';
+
+        return;
+
+      }
+
+      const currentUser = JSON.parse(user);
+
+      if (!currentUser.is_admin) {
+
+        window.location.href = '/dashboard.html';
+
+        return;
+
+      }
+
+      document.getElementById('userDisplay')
+        .textContent = `👑 ${currentUser.username}`;
+
+    }
+
+    // LOAD DATA
+
+    async function loadAllData() {
+
+      const token = localStorage.getItem('token');
+
+      try {
+
+        // USERS
+
+        const usersRes =
+          await fetch(`${API_BASE}/admin/users`, {
+
+            headers:{
+              'Authorization':`Bearer ${token}`
+            }
+
+          });
+
+        if (usersRes.ok) {
+
+          users = await usersRes.json();
+
+          renderUsers();
+
+        }
+
+        // CAMPAIGNS
+
+        const campaignsRes =
+          await fetch(`${API_BASE}/admin/campaigns`, {
+
+            headers:{
+              'Authorization':`Bearer ${token}`
+            }
+
+          });
+
+        if (campaignsRes.ok) {
+
+          campaigns = await campaignsRes.json();
+
+          renderCampaigns();
+
+        }
+
+        // CLIENTS
+
+        const clientsRes =
+          await fetch(`${API_BASE}/admin/clients`, {
+
+            headers:{
+              'Authorization':`Bearer ${token}`
+            }
+
+          });
+
+        if (clientsRes.ok) {
+
+          clients = await clientsRes.json();
+
+          renderClients();
+
+        }
+
+        // ANALYTICS
+
+        loadAnalytics();
+
+        updateStats();
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
+    // STATS
+
+    function updateStats() {
+
+      const now = new Date();
+
+      document.getElementById('totalUsers')
+        .textContent = users.length;
+
+      document.getElementById('totalCampaigns')
+        .textContent = campaigns.length;
+
+      document.getElementById('totalClients')
+        .textContent = clients.length;
+
+      document.getElementById('lastUpdate')
+        .textContent =
+          now.toLocaleTimeString(
+            'vi-VN',
+            {
+              hour:'2-digit',
+              minute:'2-digit'
+            }
+          );
+
+    }
+
+    // USERS
+
+    function renderUsers() {
+
+      const tbody =
+        document.getElementById('users-tbody');
+
+      tbody.innerHTML = users.map(user => `
+
+        <tr>
+
+          <td>${user.id}</td>
+
+          <td>${user.username}</td>
+
+          <td>${user.email}</td>
+
+          <td>${user.business_type || 'N/A'}</td>
+
+          <td>
+
+            <span class="badge ${
+              user.is_admin
+                ? 'badge-success'
+                : 'badge-pending'
+            }">
+
+              ${
+                user.is_admin
+                  ? 'ADMIN'
+                  : 'USER'
+              }
+
+            </span>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+    }
+
+    // CAMPAIGNS
+
+    function renderCampaigns() {
+
+      const tbody =
+        document.getElementById('campaigns-tbody');
+
+      tbody.innerHTML = campaigns.map(c => `
+
+        <tr>
+
+          <td>${c.owner_name || 'Unknown'}</td>
+
+          <td>${c.name}</td>
+
+          <td>${c.platform}</td>
+
+          <td>${c.status}</td>
+
+          <td>${c.goal || 'N/A'}</td>
+
+        </tr>
+
+      `).join('');
+
+    }
+
+    // CLIENTS
+
+    function renderClients() {
+
+      const tbody =
+        document.getElementById('clients-tbody');
+
+      tbody.innerHTML = clients.map(c => `
+
+        <tr>
+
+          <td>${c.owner_name || 'Unknown'}</td>
+
+          <td>${c.business_name}</td>
+
+          <td>${c.contact_name || 'N/A'}</td>
+
+          <td>${c.email}</td>
+
+          <td>${c.service || 'N/A'}</td>
+
+        </tr>
+
+      `).join('');
+
+    }
+
+    // ANALYTICS
+
+    async function loadAnalytics() {
+
+      const token =
+        localStorage.getItem('token');
+
+      try {
+
+        const response =
+          await fetch(`${API_BASE}/admin/analytics`, {
+
+            headers:{
+              'Authorization':`Bearer ${token}`
+            }
+
+          });
+
+        if (response.ok) {
+
+          const data = await response.json();
+
+          const tbody =
+            document.getElementById('analytics-tbody');
+
+          tbody.innerHTML = data.map(item => `
+
+            <tr>
+
+              <td>${item.page}</td>
+
+              <td>${item.action}</td>
+
+              <td>
+
+                ${new Date(item.timestamp)
+                  .toLocaleString('vi-VN')}
+
+              </td>
+
+            </tr>
+
+          `).join('');
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
+    // TABS
+
+    function switchTab(tab) {
+
+      document.querySelectorAll('.tab-content')
+        .forEach(el => el.style.display = 'none');
+
+      document.querySelectorAll('.tab-btn')
+        .forEach(el => el.classList.remove('active'));
+
+      document.getElementById(tab + '-tab')
+        .style.display = 'block';
+
+      event.target.classList.add('active');
+
+    }
+
+    // LOGOUT
+
+    function logout() {
+
+      localStorage.removeItem('token');
+
+      localStorage.removeItem('user');
+
+      window.location.href = '/auth.html';
+
+    }
+
+  </script>
+
+</body>
+</html>
+```

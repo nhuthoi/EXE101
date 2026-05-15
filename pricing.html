@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing - DL Marketing Cửu Long</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .pricing-container {
+      padding: 4rem 0;
+    }
+
+    .pricing-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .pricing-header h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .pricing-header p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .pricing-card {
+      background: rgba(17, 32, 58, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 2rem;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .pricing-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-8px);
+    }
+
+    .pricing-card.featured {
+      border: 2px solid var(--cyan);
+      transform: scale(1.05);
+    }
+
+    .pricing-card.featured::before {
+      content: "POPULAR";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #06111e;
+      padding: 0.5rem 1.5rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .pricing-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 0.5rem;
+    }
+
+    .pricing-description {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .pricing-price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 0.25rem;
+    }
+
+    .pricing-price span {
+      font-size: 1rem;
+      color: var(--muted);
+    }
+
+    .pricing-period {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .pricing-features {
+      list-style: none;
+      padding: 0;
+      margin: 2rem 0;
+    }
+
+    .pricing-features li {
+      padding: 0.75rem 0;
+      color: var(--text);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .pricing-features li::before {
+      content: "✓";
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .pricing-cta {
+      width: 100%;
+      padding: 0.95rem;
+      border: none;
+      border-radius: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 1rem;
+    }
+
+    .pricing-cta.primary {
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #06111e;
+    }
+
+    .pricing-cta.primary:hover {
+      transform: translateY(-2px);
+    }
+
+    .pricing-cta.secondary {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text);
+    }
+
+    .pricing-cta.secondary:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .comparison-table {
+      width: 100%;
+      margin-top: 3rem;
+      border-collapse: collapse;
+      background: rgba(17, 32, 58, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .comparison-table thead {
+      background: rgba(9, 18, 33, 0.96);
+    }
+
+    .comparison-table th {
+      padding: 1rem;
+      text-align: left;
+      color: var(--cyan);
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .comparison-table td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text);
+    }
+
+    .comparison-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .check {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .cross {
+      color: #ff6b6b;
+    }
+
+    .faq {
+      margin-top: 4rem;
+    }
+
+    .faq h3 {
+      color: var(--cyan);
+      margin-bottom: 2rem;
+      text-align: center;
+      font-size: 1.8rem;
+    }
+
+    .faq-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .faq-item {
+      background: rgba(17, 32, 58, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+      border-color: var(--blue);
+    }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .faq-icon {
+      color: var(--cyan);
+      font-size: 1.2rem;
+    }
+
+    .faq-answer {
+      display: none;
+      margin-top: 1rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <h1>Marketing FPTU</h1>
+        <p>Bảng Giá Dịch Vụ</p>
+      </div>
+      <nav>
+        <a href="index.html">← Về trang chủ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container pricing-container">
+    <section class="pricing-header">
+      <h2>Gói Dịch Vụ Marketing</h2>
+      <p>Chọn gói phù hợp với quy mô và nhu cầu của doanh nghiệp bạn</p>
+    </section>
+
+    <!-- Pricing Cards -->
+    <div class="pricing-grid">
+      <!-- Starter Plan -->
+      <div class="pricing-card">
+        <div class="pricing-name">Starter</div>
+        <div class="pricing-description">Dành cho startup và kinh doanh nhỏ mới bắt đầu</div>
+        <div class="pricing-price">$299<span>/tháng</span></div>
+        <div class="pricing-period">Cam kết tối thiểu 3 tháng</div>
+        
+        <ul class="pricing-features">
+          <li>3 chiến dịch social media/tháng</li>
+          <li>Content calendar hàng tuần</li>
+          <li>50 post được tạo bằng AI/tháng</li>
+          <li>2 nền tảng (Facebook, Instagram)</li>
+          <li>Report phân tích hàng tuần</li>
+          <li>Support qua email</li>
+        </ul>
+
+        <button class="pricing-cta secondary" onclick="selectPlan('Starter')">Chọn gói Starter</button>
+      </div>
+
+      <!-- Professional Plan -->
+      <div class="pricing-card featured">
+        <div class="pricing-name">Professional</div>
+        <div class="pricing-description">Cho các doanh nghiệp phát triển, cần chiến lược đầy đủ</div>
+        <div class="pricing-price">$599<span>/tháng</span></div>
+        <div class="pricing-period">Cam kết tối thiểu 3 tháng</div>
+        
+        <ul class="pricing-features">
+          <li>Chiến dịch social media không giới hạn</li>
+          <li>Content calendar hàng ngày</li>
+          <li>200 post được tạo bằng AI/tháng</li>
+          <li>Tất cả nền tảng (Facebook, Instagram, TikTok)</li>
+          <li>Video marketing (5 video/tháng)</li>
+          <li>A/B testing & optimization</li>
+          <li>Report chi tiết hàng tuần</li>
+          <li>Support ưu tiên 24/7</li>
+        </ul>
+
+        <button class="pricing-cta primary" onclick="selectPlan('Professional')">Chọn gói Professional</button>
+      </div>
+
+      <!-- Enterprise Plan -->
+      <div class="pricing-card">
+        <div class="pricing-name">Enterprise</div>
+        <div class="pricing-description">Giải pháp toàn diện cho các công ty lớn</div>
+        <div class="pricing-price">$999<span>/tháng</span></div>
+        <div class="pricing-period">Liên hệ để thương lượng</div>
+        
+        <ul class="pricing-features">
+          <li>Chiến dịch marketing đa kênh đầy đủ</li>
+          <li>Dedicated account manager</li>
+          <li>Custom AI training cho brand bạn</li>
+          <li>Unlimited video production</li>
+          <li>Influencer marketing coordination</li>
+          <li>Email marketing automation</li>
+          <li>CRM integration & tracking</li>
+          <li>24/7 Priority support</li>
+          <li>Quarterly strategy review</li>
+        </ul>
+
+        <button class="pricing-cta secondary" onclick="selectPlan('Enterprise')">Liên hệ sales</button>
+      </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <section>
+      <h3 style="color: var(--cyan); margin-bottom: 1.5rem;">So Sánh Chi Tiết</h3>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Tính năng</th>
+            <th>Starter</th>
+            <th>Professional</th>
+            <th>Enterprise</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Chiến dịch/tháng</strong></td>
+            <td>3</td>
+            <td>Không giới hạn</td>
+            <td>Không giới hạn</td>
+          </tr>
+          <tr>
+            <td><strong>Post AI/tháng</strong></td>
+            <td>50</td>
+            <td>200</td>
+            <td>Không giới hạn</td>
+          </tr>
+          <tr>
+            <td><strong>Nền tảng</strong></td>
+            <td>2</td>
+            <td>4</td>
+            <td>Tất cả</td>
+          </tr>
+          <tr>
+            <td><strong>Video/tháng</strong></td>
+            <td class="cross">-</td>
+            <td>5</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <td><strong>Brand Guide</strong></td>
+            <td class="cross">-</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td><strong>Dedicated Manager</strong></td>
+            <td class="cross">-</td>
+            <td class="cross">-</td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td><strong>Analytics Report</strong></td>
+            <td>Hàng tuần</td>
+            <td>Hàng tuần</td>
+            <td>Hàng ngày</td>
+          </tr>
+          <tr>
+            <td><strong>Support</strong></td>
+            <td>Email</td>
+            <td>24/7 Chat</td>
+            <td>24/7 Ưu tiên</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+      <h3>Câu Hỏi Thường Gặp</h3>
+      
+      <div class="faq-grid">
+        <div class="faq-item" onclick="toggleFAQ(this)">
+          <div class="faq-question">
+            <span>Có thể hủy gói dịch vụ bất kỳ lúc nào?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            Có, bạn có thể hủy bất kỳ lúc nào sau khi hết cam kết tối thiểu 3 tháng. Chúng tôi không có chi phí hủy bất ngờ nào. Nếu bạn hủy trước 3 tháng, sẽ có khoản phí hủy sớm tương ứng với 30% giá trị còn lại.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFAQ(this)">
+          <div class="faq-question">
+            <span>AI Content Generator có tốt không?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            AI của chúng tôi được huấn luyện trên hàng nghìn chiến dịch thành công. Tuy nhiên, tất cả content vẫn được team chuyên gia review trước khi đăng. Chúng tôi kết hợp AI speed với human creativity.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFAQ(this)">
+          <div class="faq-question">
+            <span>Làm sao tính toán ROI?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            Chúng tôi theo dõi mọi metric: impressions, clicks, conversions, sales. Hàng tuần gửi report chi tiết để bạn thấy chính xác doanh nghiệp bạn kiếm được bao nhiêu từ campaigns.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFAQ(this)">
+          <div class="faq-question">
+            <span>Có hỗ trợ tiếng Việt không?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            100% hỗ trợ tiếng Việt. Team chúng tôi là người Việt, hiểu rõ thị trường địa phương. Tất cả communication qua Tiếng Việt.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFAQ(this)">
+          <div class="faq-question">
+            <span>Tôi bắt đầu thế nào?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            1. Chọn gói phù hợp và click "Chọn gói". 2. Điền thông tin doanh nghiệp. 3. Liên hệ team chúng tôi để tư vấn và setup. Thường mất 2-3 ngày để chuẩn bị, sau đó chiến dịch bắt đầu.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFAQ(this)">
+          <div class="faq-question">
+            <span>Có thể lên cấp hoặc hạ cấp gói không?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            Có, bạn có thể thay đổi gói bất kỳ lúc nào. Nếu lên cấp, thanh toán thêm một phần. Nếu hạ cấp, chúng tôi hoàn lại tiền (tính từ ngày thay đổi).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section style="text-align: center; margin-top: 4rem; padding: 2rem; background: linear-gradient(135deg, rgba(61, 178, 255, 0.1), rgba(105, 226, 255, 0.05)); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.08);">
+      <h3 style="color: var(--cyan); margin-bottom: 1rem;">Sẵn sàng bắt đầu?</h3>
+      <p style="color: var(--muted); margin-bottom: 1.5rem;">Liên hệ với chúng tôi ngay để nhận tư vấn miễn phí</p>
+      <div style="display: flex; gap: 1rem; justify-content: center;">
+        <a href="auth.html" style="padding: 0.95rem 2rem; background: linear-gradient(135deg, var(--blue), var(--cyan)); color: #06111e; border-radius: 18px; text-decoration: none; font-weight: 600; display: inline-block;">Đăng ký ngay</a>
+        <a href="index.html#contact" style="padding: 0.95rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: var(--text); border-radius: 18px; text-decoration: none; font-weight: 600; display: inline-block;">Liên hệ tư vấn</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function selectPlan(plan) {
+      alert(`Bạn chọn gói: ${plan}\n\nVui lòng đăng nhập hoặc liên hệ với sales team để hoàn tất.`);
+    }
+
+    function toggleFAQ(element) {
+      element.classList.toggle('open');
+      const icon = element.querySelector('.faq-icon');
+      icon.textContent = element.classList.contains('open') ? '−' : '+';
+    }
+  </script>
+</body>
+</html>

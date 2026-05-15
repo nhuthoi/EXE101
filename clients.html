@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản lý Khách hàng Hệ thống - Admin</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .clients-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .clients-table { width: 100%; border-collapse: collapse; background: rgba(17, 32, 58, 0.95); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+    .clients-table th { padding: 1rem; text-align: left; color: var(--cyan); background: rgba(9, 18, 33, 0.96); }
+    .clients-table td { padding: 1rem; border-bottom: 1px solid var(--border); color: var(--text); }
+    .owner-badge { font-size: 0.75rem; color: var(--accent); background: rgba(130, 255, 202, 0.1); padding: 4px 8px; border-radius: 6px; }
+    .service-badge { background: rgba(61, 178, 255, 0.2); color: var(--blue); padding: 0.3rem 0.7rem; border-radius: 10px; font-size: 0.85rem; }
+  </style>
+</head>
+<body style="background: #06111e;">
+  <div class="site-header">
+    <div class="container header-inner">
+      <div class="brand"><h1>Marketing FPTU</h1><p>Admin Control Panel</p></div>
+      <nav><a href="dashboard.html">← Dashboard</a></nav>
+    </div>
+  </div>
+
+  <div class="clients-container">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+      <h1>Danh sách khách hàng toàn hệ thống</h1>
+      <div class="search-box" style="margin:0;"><input type="text" id="searchInput" placeholder="Tìm theo doanh nghiệp hoặc người tạo..." onkeyup="window.filterClients()"></div>
+    </div>
+
+    <table class="clients-table">
+      <thead>
+        <tr>
+          <th>Doanh nghiệp</th>
+          <th>Người tạo (User)</th>
+          <th>Liên hệ</th>
+          <th>Dịch vụ</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="clients-tbody">
+        <tr><td colspan="5" style="text-align:center; padding:3rem;">Đang đồng bộ dữ liệu từ Database...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script type="module">
+    import { API } from './api.js';
+    import { Auth } from './auth.js';
+    import { Notification } from './notifications.js';
+
+    // Chặn User thường ngay từ đầu
+    if (!Auth.requireAdmin()) {
+      window.location.href = 'dashboard.html';
+    }
+
+    let systemClients = [];
+
+    async function fetchAllData() {
+      try {
+        // Ép buộc gọi API Admin thay vì đọc LocalStorage cũ
+        const data = await API.getAdminClients(); 
+        systemClients = data || [];
+        render(systemClients);
+      } catch (err) {
+        Notification.error("Lỗi kết nối Server");
+      }
+    }
+
+    function render(data) {
+      const tbody = document.getElementById('clients-tbody');
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem;">Chưa có khách hàng nào trong Database.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = data.map(c => `
+        <tr>
+          <td><strong>${c.business_name}</strong></td>
+          <td><span class="owner-badge">👤 ${c.owner_name || 'Hệ thống'}</span></td>
+          <td>${c.email}</td>
+          <td><span class="service-badge">${c.service || 'General'}</span></td>
+          <td><button onclick="window.deleteItem(${c.id})" style="color:var(--danger); background:none; border:none; cursor:pointer;">Xóa</button></td>
+        </tr>
+      `).join('');
+    }
+
+    window.filterClients = () => {
+      const val = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = systemClients.filter(c => 
+        c.business_name.toLowerCase().includes(val) || 
+        (c.owner_name && c.owner_name.toLowerCase().includes(val))
+      );
+      render(filtered);
+    };
+
+    window.deleteItem = async (id) => {
+      if(confirm("Xóa khách hàng này khỏi hệ thống?")) {
+        await API.deleteClient(id);
+        fetchAllData();
+      }
+    };
+
+    fetchAllData();
+  </script>
+</body>
+</html>
