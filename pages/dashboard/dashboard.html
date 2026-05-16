@@ -6,7 +6,7 @@
 
   <title>User Dashboard - Marketing FPTU</title>
 
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
 </head>
 
 <body>
@@ -20,7 +20,7 @@
       </div>
 
       <nav>
-        <a href="index.html">← Trang chủ</a>
+        <a href="../../index.html">← Trang chủ</a>
 
         <a id="userDisplay"
            style="color: var(--cyan); font-weight: 600;">
@@ -280,7 +280,7 @@
 
       if (!token || !user) {
 
-        window.location.href = '/auth.html';
+        window.location.href = '../../pages/auth/auth.html';
 
         return;
 
@@ -292,7 +292,7 @@
 
       if (currentUser.is_admin) {
 
-        window.location.href = '/admin.html';
+        window.location.href = '../../pages/admin/admin.html';
 
         return;
 

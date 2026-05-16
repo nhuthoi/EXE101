@@ -3,15 +3,15 @@
 ## ✅ Các tính năng đã sẵn sàng
 
 ### 1. **Email Notifications**
-- ✅ Liên hệ form tự động gửi email về: `nkkhoi5@gmail.com`
+- ✅ Liên hệ form tự động gửi email về: 
 - ✅ Chiến dịch mới tự động thông báo qua email
 - ✅ Thực time notifications
 
 ### 2. **Admin Account**
 ```
-Username: adminFptu_EXE101
-Email: nkkhoi5@gmail.com
-Password: Admin@fptuEXE101
+Username: 
+Email: 
+Password: 
 ```
 Truy cập: http://localhost:3000/auth.html
 
@@ -155,7 +155,7 @@ Tạo file HTML mới với `type="module"`:
 </html>
 ```
 
-## 📊 API Endpoints
+##  API Endpoints
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
@@ -173,8 +173,8 @@ Tạo file HTML mới với `type="module"`:
 | POST | `/api/clients` | ✅ | Tạo client |
 | PUT | `/api/clients/:id` | ✅ | Cập nhật client |
 | DELETE | `/api/clients/:id` | ✅ | Xóa client |
-| GET | `/api/admin/contacts` | ✅🔐 | Tất cả liên hệ |
-| GET | `/api/admin/analytics` | ✅🔐 | Analytics |
+| GET | `/api/admin/contacts` | ✅private | Tất cả liên hệ |
+| GET | `/api/admin/analytics` | ✅private | Analytics |
 
 ## 📁 Project Structure
 
@@ -227,7 +227,7 @@ npm start  # Sẽ tạo DB mới
 **Email không gửi?**
 - Kiểm tra `.env` có Gmail App Password đúng không
 - Gmail cần 2FA enable
-- Kiểm tra lại email: nkkhoi5@gmail.com
+- Kiểm tra lại email: 
 
 ## 📞 Support
 

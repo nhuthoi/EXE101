@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Đăng nhập - DL Marketing Cửu Long</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Đăng nhập - Marketing FPTU</title>
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
   <style>
     .auth-container {
       min-height: 100vh;
@@ -77,7 +77,7 @@
     }
 
     .form-group input::placeholder {
-      color: rgba(255, 255, 255, 0.45);
+      color: rgba(253, 253, 253, 0.45);
     }
 
     .submit-btn {
@@ -274,7 +274,7 @@
               
               showSuccess('loginSuccess', 'Đăng nhập thành công! Chuyển hướng...');
               setTimeout(() => {
-                window.location.href = '/dashboard.html';
+                window.location.href = '../../pages/dashboard/dashboard.html';
               }, 1500);
             } else {
               showError('loginError', data.error || 'Đăng nhập thất bại');
