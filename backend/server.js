@@ -18,27 +18,35 @@ const JWT_SECRET =
   process.env.JWT_SECRET || 'super_secret_key';
 
 // ======================= EMAIL CONFIG =======================
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD
-  }
-});
+const emailUser = process.env.GMAIL_USER;
+const emailPass = process.env.GMAIL_APP_PASSWORD;
+let transporter = null;
 
-transporter.verify((error) => {
-  if (error) {
-    console.log('Email config error:', error.message);
-  } else {
-    console.log('✓ Email service configured successfully');
-  }
-});
+if (emailUser && emailPass) {
+  transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: emailUser,
+      pass: emailPass
+    }
+  });
+
+  transporter.verify((error) => {
+    if (error) {
+      console.log('Email config error:', error.message);
+    } else {
+      console.log('✓ Email service configured successfully');
+    }
+  });
+} else {
+  console.warn('Email service disabled: GMAIL_USER or GMAIL_APP_PASSWORD is not configured.');
+}
 
 // ======================= MIDDLEWARE =======================
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '..')));
 
 // ======================= DATABASE =======================
 const db = new sqlite3.Database(
@@ -414,22 +422,26 @@ app.post('/api/contact', async (req, res) => {
       }
 
       // SEND EMAIL
-      try {
-        await transporter.sendMail({
-          from: process.env.GMAIL_USER,
-          to: email,
-          subject: 'Marketing FPTU - Tiếp nhận yêu cầu',
-          html: `
-            <h2>Xin chào ${business_name}</h2>
-            <p>Chúng tôi đã nhận được yêu cầu của bạn.</p>
-            <p><b>Nhu cầu:</b> ${needs}</p>
-            <p>Chúng tôi sẽ liên hệ sớm nhất.</p>
-          `
-        });
+      if (transporter) {
+        try {
+          await transporter.sendMail({
+            from: emailUser,
+            to: email,
+            subject: 'Marketing FPTU - Tiếp nhận yêu cầu',
+            html: `
+              <h2>Xin chào ${business_name}</h2>
+              <p>Chúng tôi đã nhận được yêu cầu của bạn.</p>
+              <p><b>Nhu cầu:</b> ${needs}</p>
+              <p>Chúng tôi sẽ liên hệ sớm nhất.</p>
+            `
+          });
 
-        console.log('✓ Email sent');
-      } catch (mailError) {
-        console.log('Email send error:', mailError.message);
+          console.log('✓ Email sent');
+        } catch (mailError) {
+          console.log('Email send error:', mailError.message);
+        }
+      } else {
+        console.warn('Skipping email send: transporter is not configured.');
       }
 
       res.json({
@@ -854,7 +866,7 @@ app.get('/api/health', (req, res) => {
 
 // ======================= HOME =======================
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../index.html'));
 });
 // ======================= ERROR HANDLER =======================
 app.use((err, req, res, next) => {
